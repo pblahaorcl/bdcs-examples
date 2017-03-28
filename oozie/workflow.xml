@@ -1,0 +1,38 @@
+<workflow-app xmlns="uri:oozie:workflow:0.4" name="backup-wf">
+    <start to="shell"/>
+
+    <action name="shell">
+        <shell xmlns="uri:oozie:shell-action:0.2">
+            <job-tracker>${jobTracker}</job-tracker>
+        <name-node>${nameNode}</name-node>
+        <configuration>
+            <property>
+                <name>mapred.job.queue.name</name>
+                <value>${queueName}</value>
+            </property>
+        </configuration>
+            <exec>backup_script.sh</exec>
+            <argument>${user}</argument>
+            <file>backup_script.sh</file>
+            <file>blaha.keytab</file>
+            <capture-output/>
+        </shell>
+        <ok to="check-output"/>
+        <error to="fail"/>
+    </action>
+
+    <decision name="check-output">
+        <switch>
+            <case to="end">
+                ${wf:actionData('shell')['completed']}
+            </case>
+            <default to="fail"/>
+        </switch>
+    </decision>
+
+    <kill name="fail">
+        <message>Workflow failed, error message[${wf:errorMessage(wf:lastErrorNode())}]</message>
+    </kill>
+
+    <end name="end"/>
+</workflow-app>
