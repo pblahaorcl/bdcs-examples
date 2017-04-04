@@ -17,8 +17,8 @@ public class SyncClient {
     public static void main(String... args) throws Exception {
         String tenant = "admin";
         String user = "oracle";
-        String password = "Welcome1";
-        String url = "https://jsc00prc.uk.oracle.com:33987/bdcs/api";
+        String password = "xxxx";
+        String url = "https://xxxxxx:33987/bdcs/api";
 
         String encoded = Base64.getEncoder().encodeToString(password.getBytes("UTF-8"));
         ApiClient client = new ApiClient();
